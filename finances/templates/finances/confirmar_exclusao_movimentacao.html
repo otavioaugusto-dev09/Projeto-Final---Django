@@ -1,0 +1,18 @@
+
+{% extends 'finances/base.html' %}
+
+{% block content %}
+<h2>Excluir Movimentação</h2>
+
+<p>Deseja excluir <strong>{{ movimentacao.descricao }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">
+        Excluir
+    </button>
+    <a href="{% url 'listar_movimentacoes' %}" class="btn btn-secondary">
+        Cancelar
+    </a>
+</form>
+{% endblock %}
