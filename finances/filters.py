@@ -22,7 +22,7 @@ class MovimentacaoFilter(django_filters.FilterSet):
     )
 
     categoria = django_filters.ModelChoiceFilter(
-        queryset=Movimentacao.objects.none(),  # corrigimos já já
+        queryset=Movimentacao.objects.none(), 
         label='Categoria'
     )
 

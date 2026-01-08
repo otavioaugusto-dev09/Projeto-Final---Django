@@ -2,21 +2,35 @@
 {% extends 'finances/base.html' %}
 
 {% block content %}
-<h1 class="mb-4">Resumo Financeiro</h1>
+<h1 style="color: whitesmoke;">Movimentacoes</h1>
+<h1 class="mb-4">
+    Resumo Financeiro
+    <img src="/media/payments_black.png" style="height: 35px; width: 35px;">
+</h1>
 
 <div class="d-flex gap-4 mb-5">
     <div class="card bg-success text-white p-4" style="min-width: 200px;">
-        <h5>Receitas</h5>
+        <h5>
+            Receitas
+            <img src="/media/trending_up_white.png" style="height: 25px; width: 25px;">
+        </h5>
+        
         <h2>R$ {{ total_receitas }}</h2>
     </div>
 
     <div class="card bg-danger text-white p-4" style="min-width: 200px;">
-        <h5>Despesas</h5>
+        <h5>
+            Despesas
+            <img src="/media/trending_down_white.png" style="height: 25px; width: 25px;">
+        </h5>
         <h2>R$ {{ total_despesas }}</h2>
     </div>
 
     <div class="card bg-primary text-white p-4" style="min-width: 200px;">
-        <h5>Saldo</h5>
+        <h5>
+            Saldo  
+            <img src="/media/bar_chart_white.png" style="height: 25px; width: 25px;">
+        </h5>
         <h2>R$ {{ saldo }}</h2>
     </div>
 </div>

@@ -1,6 +1,7 @@
 # 💰 Controle de Gastos Tavin – Django
 
-Sistema web desenvolvido em Django para controle financeiro pessoal, permitindo o cadastro de receitas, despesas e categorias, além de um dashboard com resumo financeiro.
+Sistema web desenvolvido em Django para controle financeiro pessoal, permitindo o cadastro de receitas,
+despesas e categorias, além de um dashboard com resumo financeiro.
 
 ---
 
