@@ -10,6 +10,7 @@ despesas e categorias, além de um dashboard com resumo financeiro.
 - Autenticação de usuários (login e logout)
 - Cadastro de categorias (Receita ou Despesa)
 - Cadastro de movimentações financeiras
+- Uso de filtros para movimentações
 - Dashboard com:
   - Total de receitas
   - Total de despesas
