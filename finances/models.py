@@ -17,10 +17,14 @@ class Categoria(models.Model):
     
 
 class Movimentacao(models.Model):
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
     valor =  models.DecimalField(max_digits=10, decimal_places=2)
     descricao = models.CharField(max_length=200)
     data = models.DateField()
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

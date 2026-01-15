@@ -9,13 +9,16 @@ from .filters import MovimentacaoFilter
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.views.decorators.cache import never_cache
+from django.db.models.functions import TruncMonth
 
+@never_cache
 @login_required
 def listar_categorias(request):
     categorias = Categoria.objects.filter(usuario=request.user)
     return render(request, 'finances/listar_categorias.html', {'categorias': categorias})
 
-
+@never_cache
 @login_required
 def criar_categoria(request):
     if request.method == 'POST':
@@ -31,7 +34,7 @@ def criar_categoria(request):
 
     return render(request, 'finances/form_categoria.html', {'form': form})
 
-
+@never_cache
 @login_required
 def editar_categoria(request, id):
     categoria = get_object_or_404(Categoria, id=id, usuario=request.user)
@@ -47,7 +50,7 @@ def editar_categoria(request, id):
 
     return render(request, 'finances/form_categoria.html', {'form': form})
 
-
+@never_cache
 @login_required
 def excluir_categoria(request, id):
     categoria = get_object_or_404(Categoria, id=id, usuario=request.user)
@@ -55,6 +58,7 @@ def excluir_categoria(request, id):
     messages.success(request, "Categoria removida!")
     return redirect('listar_categorias')
 
+@never_cache
 @login_required
 def listar_movimentacoes(request):
     queryset = Movimentacao.objects.filter(usuario=request.user)
@@ -80,6 +84,7 @@ def listar_movimentacoes(request):
         'saldo': saldo,
     })
 
+@never_cache
 @login_required
 def criar_movimentacao(request):
     if request.method == 'POST':
@@ -90,13 +95,14 @@ def criar_movimentacao(request):
             movimentacao.save()
             return redirect('listar_movimentacoes')
     else:
-        form = MovimentacaoForm()
+        form = MovimentacaoForm(usuario=request.user)
 
     return render(request, 'finances/form_movimentacao.html', {
         'form': form,
         'titulo': 'Nova Movimentação'
     })
 
+@never_cache
 @login_required
 def editar_movimentacao(request, id):
     movimentacao = get_object_or_404(
@@ -116,6 +122,7 @@ def editar_movimentacao(request, id):
         'titulo': 'Editar Movimentação'
     })
 
+@never_cache
 @login_required
 def excluir_movimentacao(request, id):
     movimentacao = get_object_or_404(
@@ -130,8 +137,11 @@ def excluir_movimentacao(request, id):
         'movimentacao': movimentacao
     })
 
+@never_cache
 @login_required
 def dashboard(request):
+    usuario=request.user
+
     receitas = Movimentacao.objects.filter(
         usuario=request.user,
         categoria__tipo='receita'
@@ -146,7 +156,7 @@ def dashboard(request):
 
     totais_por_categoria = (
         Movimentacao.objects
-        .filter(usuario=request.user)
+        .filter(usuario=usuario)
         .values('categoria__nome', 'categoria__tipo')
         .annotate(total=Sum('valor'))
     )
@@ -157,5 +167,50 @@ def dashboard(request):
         'saldo': saldo,
         'totais_por_categoria': totais_por_categoria,
     }
+    
+    
+    despesas_por_categoria = (
+        Movimentacao.objects
+        .filter(usuario=usuario, categoria__tipo='despesa')
+        .values('categoria__nome')
+        .annotate(total=Sum('valor'))
+        .order_by('-total')
+    )
+
+    labels_pizza = [d['categoria__nome'] for d in despesas_por_categoria]
+    dados_pizza = [float(d['total']) for d in despesas_por_categoria]
+
+    movimentacoes_mensais = (
+        Movimentacao.objects
+        .filter(usuario=usuario)
+        .annotate(mes=TruncMonth('data'))
+        .values('mes', 'categoria__tipo')
+        .annotate(total=Sum('valor'))
+        .order_by('mes')
+    )
+
+    if not labels_pizza:
+        labels_pizza = []
+        dados_pizza = []
+
+    meses = sorted({m['mes'].strftime('%m/%Y') for m in movimentacoes_mensais})
+
+    receitas_mensais = {mes: 0 for mes in meses}
+    despesas_mensais = {mes: 0 for mes in meses}
+
+    for m in movimentacoes_mensais:
+        mes = m['mes'].strftime('%m/%Y')
+        if m['categoria__tipo'] == 'receita':
+            receitas_mensais[mes] += float(m['total'])
+        else:
+            despesas_mensais[mes] += float(m['total'])
+
+    context.update({
+    'labels_pizza': labels_pizza,
+    'dados_pizza': dados_pizza,
+    'meses': meses,
+    'dados_receitas': list(receitas_mensais.values()),
+    'dados_despesas': list(despesas_mensais.values()),
+})
 
     return render(request, 'finances/dashboard.html', context)
