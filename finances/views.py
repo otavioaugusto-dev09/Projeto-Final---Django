@@ -160,57 +160,15 @@ def dashboard(request):
         .values('categoria__nome', 'categoria__tipo')
         .annotate(total=Sum('valor'))
     )
-
-    context = {
-        'total_receitas': receitas,
-        'total_despesas': despesas,
+    
+    return render(request, 'finances/dashboard.html', {
+        'receitas': receitas,
+        'despesas': despesas,
         'saldo': saldo,
         'totais_por_categoria': totais_por_categoria,
-    }
-    
-    
-    despesas_por_categoria = (
-        Movimentacao.objects
-        .filter(usuario=usuario, categoria__tipo='despesa')
-        .values('categoria__nome')
-        .annotate(total=Sum('valor'))
-        .order_by('-total')
-    )
+    })
 
-    labels_pizza = [d['categoria__nome'] for d in despesas_por_categoria]
-    dados_pizza = [float(d['total']) for d in despesas_por_categoria]
-
-    movimentacoes_mensais = (
-        Movimentacao.objects
-        .filter(usuario=usuario)
-        .annotate(mes=TruncMonth('data'))
-        .values('mes', 'categoria__tipo')
-        .annotate(total=Sum('valor'))
-        .order_by('mes')
-    )
-
-    if not labels_pizza:
-        labels_pizza = []
-        dados_pizza = []
-
-    meses = sorted({m['mes'].strftime('%m/%Y') for m in movimentacoes_mensais})
-
-    receitas_mensais = {mes: 0 for mes in meses}
-    despesas_mensais = {mes: 0 for mes in meses}
-
-    for m in movimentacoes_mensais:
-        mes = m['mes'].strftime('%m/%Y')
-        if m['categoria__tipo'] == 'receita':
-            receitas_mensais[mes] += float(m['total'])
-        else:
-            despesas_mensais[mes] += float(m['total'])
-
-    context.update({
-    'labels_pizza': labels_pizza,
-    'dados_pizza': dados_pizza,
-    'meses': meses,
-    'dados_receitas': list(receitas_mensais.values()),
-    'dados_despesas': list(despesas_mensais.values()),
-})
-
-    return render(request, 'finances/dashboard.html', context)
+@never_cache
+@login_required
+def info(request):
+    return render(request, 'finances/info.html')

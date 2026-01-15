@@ -15,4 +15,6 @@ urlpatterns = [
     path('movimentacoes/nova/', views.criar_movimentacao, name='criar_movimentacao'),
     path('movimentacoes/editar/<int:id>/', views.editar_movimentacao, name='editar_movimentacao'),
     path('movimentacoes/excluir/<int:id>/', views.excluir_movimentacao, name='excluir_movimentacao'),
+
+    path('info/', views.info, name='info')
 ]

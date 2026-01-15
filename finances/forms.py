@@ -7,6 +7,11 @@ class CategoriaForm(forms.ModelForm):
         fields = ['nome', 'tipo']
 
 class MovimentacaoForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        self.usuario = kwargs.pop('usuario', None)
+        super().__init__(*args, **kwargs)
+    
     class Meta:
         model = Movimentacao
         fields = ['valor', 'descricao', 'data', 'categoria']

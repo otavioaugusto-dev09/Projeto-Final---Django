@@ -50,42 +50,39 @@
     Nova Movimentação
 </a>
 
-<form method="get" class="card card-body mb-4">
-    <h5>Filtros</h5>
-
-    
-
-    <button class="btn btn-outline-primary mb-3" type="button"
+<button class="btn btn-outline-primary mb-3" type="button"
         data-bs-toggle="collapse"
-        data-bs-target="#filtrosCollapse">
+        data-bs-target="#filtrosCollapse"
+        aria-expanded="false"
+        aria-controls="filtrosCollapse">
     Mostrar / Ocultar Filtros
 </button>
 
-<div class="collapse show" id="filtrosCollapse">
-    <form method="get" class="card card-body mb-4">
+<form method="get" class="card card-body mb-4 collapse" id="filtrosCollapse">
 
-        <h5 class="mb-3">Filtros</h5>
+    <h5 class="mb-3">Filtros</h5>
 
-        {% for field in filtro.form %}
+    {% for field in filtro.form %}
         <div class="mb-2">
             {{ field.label_tag }}
             {{ field }}
         </div>
-        {% endfor %}
+    {% endfor %}
 
-        <div class="d-flex gap-2 mt-3">
-            <button type="submit" class="btn btn-primary">
-                Filtrar
-            </button>
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">
+            Filtrar
+        </button>
 
-            <a href="{% url 'listar_movimentacoes' %}" class="btn btn-secondary">
-                Limpar
-            </a>
-        </div>
+        <a href="{% url 'listar_movimentacoes' %}" class="btn btn-secondary">
+            Limpar
+        </a>
+    </div>
 
     </form>
 </div>
 
+<div class="container">
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -118,4 +115,5 @@
     </tbody>
 
 </table>
+</div>
 {% endblock %}
