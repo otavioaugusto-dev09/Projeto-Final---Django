@@ -12,6 +12,11 @@ class MovimentacaoForm(forms.ModelForm):
         self.usuario = kwargs.pop('usuario', None)
         super().__init__(*args, **kwargs)
     
+        if self.usuario:
+            self.fields['categoria'].queryset = Categoria.objects.filter(
+                usuario=self.usuario
+            )
+
     class Meta:
         model = Movimentacao
         fields = ['valor', 'descricao', 'data', 'categoria']
