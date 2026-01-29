@@ -28,3 +28,6 @@ despesas e categorias, além de um dashboard com resumo financeiro.
 - CSS (Bootstrap)
 
 ---
+
+
+método DELETE em deletar mov e colocar requirements.txt e README.md com instruções de launch
