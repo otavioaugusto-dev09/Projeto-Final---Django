@@ -29,5 +29,12 @@ despesas e categorias, além de um dashboard com resumo financeiro.
 
 ---
 
+## 🚀 Como startar o Projeto
 
-método DELETE em deletar mov e colocar requirements.txt e README.md com instruções de launch
+- Clone o repositório do GitHub;
+- Instale as dependências (pip install requirements.txt);
+- Dê makemigrations e migrate;
+- Crie um superusuário (createsuperuser);
+- Dê runserver e abra o link.
+
+---
