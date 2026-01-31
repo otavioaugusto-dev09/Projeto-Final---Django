@@ -32,9 +32,9 @@ despesas e categorias, além de um dashboard com resumo financeiro.
 ## 🚀 Como startar o Projeto
 
 - Clone o repositório do GitHub;
-- Instale as dependências (pip install requirements.txt);
-- Dê makemigrations e migrate;
-- Crie um superusuário (createsuperuser);
-- Dê runserver e abra o link.
+- Instale as dependências - pip install requirements.txt;
+- Faça as migrações - python manage.py makemigrations - python manage.py migrate;
+- Crie um superusuário - python manage.py createsuperuser;
+- Dê runserver - python manage.py runserver - e abra o link.
 
 ---
